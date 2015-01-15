@@ -1,10 +1,14 @@
+grocery_list = [ "croissant", "kale", "oranges", "wine", "pickles" ]
+user = {}
+user[:shopping_cart] = []
+
 def get_user_name
 	puts "Hi what's your name?"
  	return gets.chomp
 end
 
 def get_user_age
-    puts "How old are you?"
+  puts "How old are you?"
  	return gets.chomp.to_i
  	#age = 14
 end
@@ -34,63 +38,83 @@ def when_is_user_is_75(age)
   end
 end
 
-def get_grandparent_status?(age_description)
-  puts "Are you a great-great grand#{age_description}?[YN]"
-	have_grandkids = gets.chomp.upcase
-  if have_grandkids == "Y"
-    return true
-  else
-    return false
-  end
+def get_grandparent_status?      
+	has_grandkids = gets.chomp.upcase
+  return has_grandkids == "Y"
 end
 
 def set_age_description(age, gender)
   if young?(age)
-		age_description = gender == "M" ? "boy" : "girl"
-    return age_description
- 	elsif old?(age)
-		age_description = gender == "M" ? "father" : "mother"
-    return age_description
+    return gender == "M" ? "boy" : "girl"
+ 	elsif old?(age) 
+    return gender == "M" ? "father" : "mother"
  	end	
 end
 
-def ask_initial_ok?(initial)
-  puts "Do you mind if I call you #{initial}?[YN]"
+def ask_initial_ok?
   initial_ok = gets.chomp.upcase 
-  if initial_ok == "N"
-    return true
-  else
-    return false
-  end
+  return initial_ok == "N"
 end
 
- user_name = get_user_name
+def grocery_item_guess(list)
+  srand
+  index = rand(list.count) - 1
+  return list[index]
+end
 
- puts user_name == "Ernest" ? "I knew it was you!" : "Sorry, you're not Ernest."
+def grab_item?
+  return gets.chomp.chars.first.upcase == "Y"
+end
 
- user_age = get_user_age 
+user[:name] = get_user_name
+#user[:name] = "Josie"
 
- user_gender = get_user_gender
+puts user[:name] == "Ernest" ? "I knew it was you!" : "Sorry, you're not Ernest."
 
- puts "Hi #{user_name}, who is #{user_age} years old!"
+user[:age] = get_user_age 
+#user[:age] = 100
 
- age_description = set_age_description(user_age, user_gender)
+user[:gender] = get_user_gender
+#user[:gender] = "M"
 
- puts "You are a young #{age_description}." 				           if young?(user_age)
- have_grandkids = get_grandparent_status?(age_description)	     if old?(user_age)
- puts "Fantastic!!! It must be great to have grand-rugrats!!"    if have_grandkids
+puts "Hi #{user[:name]}, who is #{user[:age]} years old!"
 
+user[:description] = set_age_description(user[:age], user[:gender])
+
+puts "You are a young #{user[:description]}." 				            if young?(user[:age])
+
+puts "Are you a great-great grand#{user[:description]}?[YN]"      if old?(user[:age])
+user[:has_grandkids?] = get_grandparent_status?                   if old?(user[:age])
+puts "Fantastic!!! It must be great to have grand-rugrats!!"      if user[:has_grandkids?]
+
+when_is_user_is_75(user[:age])
+
+user[:initial] = user[:name].chars.first
+puts "Do you mind if I call you #{user[:initial]}?[YN]"
+user[:name] = user[:initial] if ask_initial_ok?
  
- when_is_user_is_75(user_age)
+puts "Hey #{user[:name]}, where are you going!?..."
+user[:destination] = gets.chomp
+#user[:destination] = "home"
+puts "Can I come with you?" unless user[:destination] == "restroom"
 
- initial = user_name.chars.first
- user_name = initial if ask_initial_ok?(initial)
- 
- puts "Hey #{user_name}, where are you going!?..."
- going = gets.chomp
- puts "Can I come with you?" unless going == "restroom"
+puts "Hey \"Dude\", what's up?"
 
- puts "Hey \"Dude\", what's up?"
+puts "Lets see if you got the items from your grocery list"
+item_guess = grocery_item_guess(grocery_list)
+
+puts "Did you already grab the #{item_guess}?" 
+user_grab_item = grab_item?
+grocery_list.delete(item_guess)     if user_grab_item
+user[:shopping_cart] << item_guess   if user_grab_item
+
+puts "Oh yeah, don't forget the bread?" 
+grocery_list << "bread"
+
+print "#{grocery_list} "
+puts
+
+puts user
 
 
 
