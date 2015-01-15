@@ -15,20 +15,22 @@ end
 
 def get_user_gender
 	puts "Are you a Male or Female?[MF]"
- 	return gets.chomp.upcase
+ 	return gets.chomp.chars.first.capitalize
  	#gender = "M"
 end
 
-def young?(age)
-  return age <= 16
+def young?(user)
+  return user[:age] <= 16
 end 
 
-def old?(age)
-	return age >= 100
+def old?(user)
+	return user[:age] >= 100
 end
 
-def when_is_user_is_75(age)
-  case age
+def print_when_is_user_is_75(user, milestone ) ### please complete case statement & set default milestone value
+  milestone = 75
+  age_delta = (milestone - user[:age]).abs
+  case user[:age]
  	when 0..74
  		puts "You'll be 75 in #{75 - age} years."
  	when 75
@@ -39,15 +41,16 @@ def when_is_user_is_75(age)
 end
 
 def get_grandparent_status?      
-	has_grandkids = gets.chomp.upcase
+	has_grandkids = gets.chomp.chars.first.capitalize
   return has_grandkids == "Y"
 end
 
-def set_age_description(age, gender)
-  if young?(age)
-    return gender == "M" ? "boy" : "girl"
- 	elsif old?(age) 
-    return gender == "M" ? "father" : "mother"
+def set_age_description(user)
+
+  if young?(user)
+    return user[:gender] == "M" ? "boy" : "girl"
+ 	elsif old?(user) 
+    return user[:gender] == "M" ? "father" : "mother"
  	end	
 end
 
@@ -56,10 +59,14 @@ def ask_initial_ok?
   return initial_ok == "N"
 end
 
+# def grocery_item_guess(list)
+#   srand
+#   index = rand(list.count) - 1
+#   return list[index]
+# end
+
 def grocery_item_guess(list)
-  srand
-  index = rand(list.count) - 1
-  return list[index]
+    list.sample
 end
 
 def grab_item?
@@ -70,7 +77,7 @@ user[:name] = get_user_name
 #user[:name] = "Josie"
 
 puts user[:name] == "Ernest" ? "I knew it was you!" : "Sorry, you're not Ernest."
-
+  
 user[:age] = get_user_age 
 #user[:age] = 100
 
@@ -79,15 +86,15 @@ user[:gender] = get_user_gender
 
 puts "Hi #{user[:name]}, who is #{user[:age]} years old!"
 
-user[:description] = set_age_description(user[:age], user[:gender])
+user[:description] = set_age_description(user)
 
-puts "You are a young #{user[:description]}." if young?(user[:age])
+puts "You are a young #{user[:description]}." if young?(user)
 
 puts "Are you a great-great grand#{user[:description]}?[YN]" if old?(user[:age])
 user[:has_grandkids?] = get_grandparent_status?              if old?(user[:age])
 puts "Fantastic!!! It must be great to have grand-rugrats!!" if user[:has_grandkids?]
 
-when_is_user_is_75(user[:age])
+print_when_is_user_is_75(user)
 
 user[:initial] = user[:name].chars.first
 puts "Do you mind if I call you #{user[:initial]}?[YN]"
