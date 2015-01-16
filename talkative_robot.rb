@@ -190,7 +190,13 @@ def guess_if_item_in_cart(user)
   grocery_list.sample
 end
 
+def print_grocery_list(user)
+  current_user = user.last
+  current_user[:grocery_list].each_with_index { |item, index| printf("%#2d -- %s\n", index + 1, item)}
+end
+
 def check_user_grocery_list_items(user)
+  print_grocery_list(user)
   item_guess = guess_if_item_in_cart(user)
   puts "Did you already grab the #{item_guess}?" 
   remove_item_from_grocery_list(user, item_guess) if grab_item?
@@ -200,10 +206,29 @@ def print_check_grocery_list_message
     puts "Lets see if you got the items from your grocery list"
 end
 
+def format_update_grocery_list_to_csv_with_index(user)  #wip
+  current_user = user.last
+  current_user[:grocery_list].join(",")
+end
+
+def remember_bread(user)
+  current_user = user.last
+  puts "Oh yeah, don't forget the bread?" 
+  current_user[:grocery_list] << "bread"
+  user
+end
+
+def update_grocery_list_file(user)
+  current_user = user.last
+  new_grocery_list = format_update_grocery_list_to_csv_with_index(user)
+  # IO.write("#{current_user[:name]}_new_grocery_list.txt", new_grocery_list)
+  IO.write("new_grocery_list.csv", new_grocery_list)
+end
+
 def check_user_grocery_list(user)
   print_check_grocery_list_message
-  user_grab_item = check_user_grocery_list_items(user)
-  remove_item_from_grocery_list(user, user_grab_item) if user_grab_item
+  check_user_grocery_list_items(user)
+  
 end
 
 ###  remove this block when done testing -- start here
@@ -220,19 +245,12 @@ print_author_info(people)
 
 ###  remove this block when done testing -- end here
 
-
 check_user_grocery_list(people)
+remember_bread(people)
+update_grocery_list_file(people)
 
 
 
-
-# grocery_list = load_grocery_list("grocery_list.txt")
-# puts "Oh yeah, don't forget the bread?" 
-# grocery_list << "bread"
-
-
-# puts "Here is what is left on your grocery list:"
-# grocery_list.each_with_index { |item, index| printf("%#2d -- %s\n", index + 1, item)}
 
 
 
