@@ -2,13 +2,13 @@ require 'pry'
 
 
   
-people = []  # replace when done testing
+# people = []  # replace when done testing
 
 
 ###  remove this block when done testing -- start here
-# author = { :name=>"Martin", :age=>10, :gender=>"M", :shopping_cart=>[], :author=> "yes", :description=>"boy", :initial=>"M", :destination=>"n" }
-# user   = { :name=>"Ernest", :age=>10, :gender=>"M", :shopping_cart=>[], :grocery_list => ["apples", "oranges", "peaches", "kale"], :author=> nil, :description=>"boy", :initial=>"M", :destination=>"n" }
-# people = [author, user]
+author = { :name=>"Martin", :age=>10, :gender=>"M", :shopping_cart=>[], :author=> true, :description=>"boy", :initial=>"M", :destination=>"home" }
+user   = { :name=>"Ernest", :age=>10, :gender=>"M", :shopping_cart=>[], :grocery_list => ["apples", "oranges", "peaches", "kale"], :description=>"mother", :initial=>"F", :destination=>"restroom" }
+people = [author, user]
 ###  remove this block when done testing -- end here
 
 
@@ -23,8 +23,8 @@ end
 
 
 def get_user_name
-	puts "What's your name?"
- 	gets.chomp.capitalize
+  puts "What's your name?"
+  gets.chomp.capitalize
 end
 
 def get_user_age
@@ -48,12 +48,12 @@ end
 def when_is_user_is_75(user)
   delta = (75 - user[:age]).abs
   case user[:age]
- 	when 0..74
- 		puts "You'll be 75 in #{delta} years."
- 	when 75
- 		puts "You're 75!!!!"
+  when 0..74
+    puts "You'll be 75 in #{delta} years."
+  when 75
+    puts "You're 75!!!!"
   when 76..150
-		puts "You turned 75 #{delta} years ago."
+    puts "You turned 75 #{delta} years ago."
   end
 end
 
@@ -91,8 +91,7 @@ def get_user_info
   name   = get_user_name
   age    = get_user_age
   gender = get_user_gender 
-  shopping_cart = []
-  {name: name, age: age, gender: gender, shopping_cart: shopping_cart}
+  { name: name, age: age, gender: gender}
 end
 
 def user_greeting_message(user)
@@ -130,7 +129,6 @@ def user_questionaire(user)
   ask_if_user_grandparent(user) if old?(user)
   ask_if_mind_initial(user)
   ask_where_user_going(user)
-
 end
 
 def get_user_questionaire(user)
@@ -141,13 +139,14 @@ end
 def add_user_info
   user = add_user
   get_user_questionaire(user)
+  user[:shopping_cart] = []
   user
 end
 
 def add_user 
   puts "Welcome New User!!"
   user = get_user_info
-  user[:author] = false
+  # user[:author] = false  ## change 1 - remove user[:author] from add user
   user[:grocery_list] = load_grocery_list("grocery_list.txt")
   user 
 end
@@ -158,24 +157,26 @@ def add_author_info
   author
 end
 
-
 def add_author
   puts "Welcome Great Creator of Content"
   author = get_user_info
-  author[:author] = "yes"
+  author[:author] = true         ## change 1 - remove user[:author] from add user
   author
 end
 
 def author_exists?(people)
   people.each do |person| 
-  break if person[:author] == "yes" ? true : false
+  # break if person[:author] == "yes" ? true : false ## change 1 - remove user[:author] from add user
+  break if person[:author]
   end
 end
 
 def print_author_info(people)
   puts "Here is the author info"
-  author_info = people.select {|person| person[:author] == "yes"}
-  author_info.each {|key, value| puts "#{key}  is #{value}"}
+  author_info = people.select {|person| person[:author]}.first
+  # author_info = people.select {|person| person[:author] == "yes"}.first ## change 1 - remove user[:author] from add user
+
+  author_info.each {|key, value| printf("%#s \t -- \t\t %s\n", key.capitalize, value)}
 end
 
 def remove_item_from_grocery_list(user, item)
@@ -192,14 +193,15 @@ end
 
 def print_grocery_list(user)
   current_user = user.last
+  puts "Here is #{current_user[:grocery_list]}'s grocery list."
   current_user[:grocery_list].each_with_index { |item, index| printf("%#2d -- %s\n", index + 1, item)}
 end
 
 def check_user_grocery_list_items(user)
-  print_grocery_list(user)
   item_guess = guess_if_item_in_cart(user)
   puts "Did you already grab the #{item_guess}?" 
   remove_item_from_grocery_list(user, item_guess) if grab_item?
+  user
 end
 
 def print_check_grocery_list_message
@@ -225,30 +227,36 @@ def update_grocery_list_file(user)
   IO.write("new_grocery_list.csv", new_grocery_list)
 end
 
+
+
 def check_user_grocery_list(user)
+  current_user = user.last
+  number_of_list_items = current_user[:grocery_list].count
   print_check_grocery_list_message
-  check_user_grocery_list_items(user)
-  
+  number_of_list_items.times {check_user_grocery_list_items(user)}
+  user
 end
 
-###  remove this block when done testing -- start here
+###  remove this comment from top of block when done testing -- start here
 
-people << add_author_info if author_exists?(people) 
+# people << add_author_info if author_exists?(people) 
 
-number_of_linefeeds(2)
+# number_of_linefeeds(2)
 
-people << add_user_info until people.count >= 2
+# people << add_user_info until people.count >= 2
 
-number_of_linefeeds(2)
+# number_of_linefeeds(2)
 
 print_author_info(people)
 
-###  remove this block when done testing -- end here
+###  remove this comment from bottom of block when done testing -- end here
 
+print_grocery_list(people)
 check_user_grocery_list(people)
 remember_bread(people)
 update_grocery_list_file(people)
 
+puts people
 
 
 
