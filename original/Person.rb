@@ -3,18 +3,29 @@ require 'pry'
 class Person
   attr_accessor  :instance_args
   def initialize(args = {})
-    @instance_args                 = args
-    @instance_args[:name]          = args[:name]
-    @instance_args[:gender]        = args[:gender]
-    @instance_args[:age]           = args[:age]
+    @name          = args[:name]
+    @gender        = args[:gender]
+    @age           = args[:age]
+  end
+
+  def get_name
+    @name
+  end
+
+  def get_age
+    @age  
+  end
+
+  def get_gender
+    @gender 
   end
 
   def young?
-    @instance_args[:age] <= 16
+    @age <= 16
   end
 
   def old?
-    @instance_args[:age] >= 100
+    @age >= 100
   end
 
   def when_is_user_is_75

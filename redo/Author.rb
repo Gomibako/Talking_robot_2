@@ -4,6 +4,9 @@ require './Person'
 class Author < Person
   def initialize(args = {})
     super
-    @instance_args[:author] = true
+    @name      = "Martin"
+    @age       = "42"
+    @gender    = "M"
   end
+
 end
