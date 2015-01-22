@@ -26,7 +26,6 @@ class Person
     @name          = args[:name]
     @gender        = args[:gender]
     @age           = args[:age]
-    @spaghetti     = args[:spaghetti]
   end
 
   def young?
@@ -35,17 +34,5 @@ class Person
 
   def old?
     @age >= 100
-  end
-
-  def when_is_user_is_75
-    delta = (75 - age).abs
-    case age
-    when 0..74
-      puts "You'll be 75 in #{delta} years."
-    when 75
-      puts "You're 75!!!!"
-    when 76..150
-      puts "You turned 75 #{delta} years ago."
-    end
   end
 end
