@@ -21,12 +21,7 @@ class GroceryList
       "[#{ index + 1 }]  --->  #{ item }"
     end
     item_list.join("\n")
-    
   end
-
-  # def name 
-  #   @owner.name
-  # end
 end
 
 

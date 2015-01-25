@@ -1,6 +1,6 @@
 require 'pry'
-require './Person'
-require './GroceryList'
+require './person'
+require './grocery_list'
 
 class User < Person 
   attr_accessor :name, :age, :gender

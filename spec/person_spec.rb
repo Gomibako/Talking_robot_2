@@ -37,11 +37,11 @@ describe Person do
       let (:person_75) { Person.new(age: 75) }
 
       it "is true" do
-        expect ( person_75.when_is_user_is_75 ).to eq("You're 75!!!!")
+        expect( person_75.when_is_user_is_75 ).to eq("You're 75!!!!")
       end
     end
   end
-  
+
   describe "#when_is_user_is_75" do
     context "when user is over 75" do
       let (:person_105) { Person.new(age: 105) }
